@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ASG 4 - Lighting</title>
+  <!-- Load Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Load External Libraries -->
+  <script src="../lib/cuon-matrix-cse160.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/webgl-utils.js"></script>
+  <!-- Load Scripts -->
+  <script src="Camera.js"></script>
+  <script src="Triangle.js"></script>
+  <script src="Cube.js"></script>
+  <script src="Sphere.js"></script>
+  <script src="dome.js"></script>
+  <script src="BlockyAnimal.js"></script>
+  <script src="World.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 20px;
+      background-color: #f7f9fb;
+      color: #333;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    button, input[type=range] {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    #controls {
+      margin-top: 20px;
+    }
+    .control-section {
+      margin: 15px 0;
+    }
+    #info-panel {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #e9f5ff;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    #key-controls {
+      margin-top: 20px;
+    }
+    .key {
+      display: inline-block;
+      padding: 5px 10px;
+      margin: 3px;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .slider-container {
+      margin: 15px 0;
+    }
+    .slider-container label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .slider-value {
+      font-weight: bold;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body onload="main()">
+  <h1>ASG 4 - Lighting</h1>
+  <canvas id="webgl" width="600" height="400">
+    Please use a browser that supports the <code>&lt;canvas&gt;</code> element.
+  </canvas>
+  <p id="numdot">Performance Info: XXX</p>
+  <p id="instructions">Use WASD to move, QE to rotate, Mouse to look around</p>
+
+  <div class="control-section">
+    <h3>Normal Visualization</h3>
+    <button type="button" id="normalOn">Normal On</button>
+    <button type="button" id="normalOff">Normal Off</button>
+  </div>
+
+  <div class="control-section">
+    <h3>Lighting Controls</h3>
+    <button type="button" id="lightOn">Light On</button>
+    <button type="button" id="lightOff">Light Off</button>
+    
+    <h4>Light Position</h4>
+    <div>
+      Light X <input type="range" min="-250" max="250" value="100" class="slider" id="lightSlideX">
+      <br>Light Y <input type="range" min="-250" max="250" value="150" class="slider" id="lightSlideY">
+      <br>Light Z <input type="range" min="-250" max="250" value="100" class="slider" id="lightSlideZ">
+    </div>
+    
+    <h4>Light Color</h4>
+    <div>
+      Red <input type="range" min="0" max="100" value="100" class="slider" id="lightColorR">
+      <br>Green <input type="range" min="0" max="100" value="100" class="slider" id="lightColorG">
+      <br>Blue <input type="range" min="0" max="100" value="100" class="slider" id="lightColorB">
+    </div>
+  </div>
+
+  <div class="control-section">
+    <h3>Spotlight</h3>
+    <button type="button" id="spotlightOn">Spotlight On</button>
+    <button type="button" id="spotlightOff">Spotlight Off</button>
+    <br>Cutoff Angle <input type="range" min="5" max="90" value="30" class="slider" id="spotlightCutoff">
+  </div>
+  
+  <div id="controls">
+    <h2>Controls</h2>
+    <button type="button" id="resetButton">Reset Scene</button>
+    
+    <div class="control-section">
+      <h3>Performance</h3>
+      <div class="slider-container">
+        <label for="renderDistance">Render Distance: <span id="renderDistanceValue" class="slider-value">20</span></label>
+        <input type="range" id="renderDistance" min="5" max="32" value="20" 
+              oninput="document.getElementById('renderDistanceValue').textContent=this.value;">
+        <p>Lower values improve performance</p>
+      </div>
+    </div>
+    
+    <div class="control-section">
+      <h3>Animation</h3>
+      <button type="button" id="animationOnButton">Enable Animation</button>
+      <button type="button" id="animationOffButton">Disable Animation</button>
+    </div>
+    
+    <div id="key-controls">
+      <h3>Keyboard Controls</h3>
+      <div>
+        <span class="key">W</span> Move Forward
+        <span class="key">S</span> Move Backward
+        <span class="key">A</span> Move Left
+        <span class="key">D</span> Move Right
+      </div>
+      <div>
+        <span class="key">Q</span> Turn Left
+        <span class="key">E</span> Turn Right
+        <span class="key">N</span> Toggle Normal Visualization
+        <span class="key">L</span> Toggle Lighting
+      </div>
+      <div>
+        <p>You can also use the mouse to look around by clicking and dragging</p>
+      </div>
+    </div>
+    
+    <div id="info-panel">
+      <h3>Info</h3>
+      <p>Use keyboard shortcuts: N (normal visualization), L (toggle lighting)</p>
+    </div>
+  </div>
+</body>
+</html>
